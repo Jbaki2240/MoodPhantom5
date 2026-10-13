@@ -144,3 +144,18 @@
 .profile-save-trigger-btn:hover {
   background-color: #7c3aed;
 }
+
+.profile-fields { border: 0; padding: 0; margin: 0; min-width: 0; }
+.profile-fields:disabled { opacity: 0.6; }
+.profile-page-view-container button:disabled { cursor: not-allowed; opacity: 0.6; }
+.profile-user-details { min-width: 0; padding-right: 20px; overflow-wrap: anywhere; }
+.profile-user-details h3 { margin: 0 0 4px; }
+.profile-user-details p { margin: 0; font-size: 0.85rem; color: #94a3b8; }
+.avatar-mock-circle { flex-shrink: 0; }
+.metric-data-row { gap: 12px; }
+.metric-data-row .value-display { overflow-wrap: anywhere; text-align: right; min-width: 0; }
+.metric-data-row input, .metric-data-row select { min-width: 0; max-width: 60%; }
+.profile-success { padding: 12px; color: #a7f3d0; background: rgba(16, 185, 129, 0.12); border-radius: 10px; }
+.profile-page-view-container input:focus-visible,
+.profile-page-view-container select:focus-visible,
+.profile-page-view-container button:focus-visible { outline: 2px solid #a78bfa; outline-offset: 3px; }

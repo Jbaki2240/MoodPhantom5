@@ -1,13 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
 
-let supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim().replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
 const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-// Force-remove any accidental /rest/v1/ or trailing slashes
-if (supabaseUrl && supabaseUrl.includes("/rest/v1")) {
-  supabaseUrl = supabaseUrl.replace("/rest/v1", "").replace(/\/$/, "");
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in .env.local, then restart Vite.");
 }
 
-console.log("Cleaned Supabase URL being used:", supabaseUrl);
-
 export const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function getEmailSignupSettings() {
+  const response = await fetch(`${supabaseUrl}/auth/v1/settings`, {
+    headers: { apikey: supabaseKey },
+    cache: "no-store",
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!response.ok) throw new Error("Could not check the sign-up settings. Please try again.");
+  return response.json();
+}

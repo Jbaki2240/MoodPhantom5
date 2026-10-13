@@ -1,5 +1,5 @@
 // health.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // 👈 1. IMPORT THE ROUTER NAVIGATE HOOK
 import { supabase } from "./supabase"; 
 import { Menu, ChevronRight, Check } from "lucide-react";
@@ -16,7 +16,7 @@ export default function Health() {
   });
 
   // Dynamic measurements state holding your UI targets
-  const [metrics, setMetrics] = useState({
+  const [metrics] = useState({
     bloodSugar: 120,
     bloodPressure: "118/76",
     weight: 65

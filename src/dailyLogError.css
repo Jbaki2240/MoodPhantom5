@@ -1,0 +1,53 @@
+.daily-log-error {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fecaca;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.daily-log-error p { margin: 0 0 12px; }
+.daily-log-setup h3 { color: #ffffff; margin: 0 0 8px; }
+.daily-log-setup ol { padding-left: 22px; }
+.daily-log-setup li { margin-bottom: 8px; }
+.daily-log-error-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+
+.daily-log-error button,
+.daily-log-error a {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  background: #12131a;
+  color: #ffffff;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.daily-log-error button:disabled { opacity: 0.6; cursor: not-allowed; }
+.daily-log-error details { margin: 12px 0; }
+.daily-log-error summary { cursor: pointer; }
+.daily-log-error pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.daily-log-error textarea {
+  width: 100%;
+  min-height: 200px;
+  margin-top: 8px;
+  padding: 12px;
+  color: #e2e8f0;
+  background: #090a0f;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  font: 0.75rem monospace;
+  resize: vertical;
+}
+
+.daily-log-error button:focus-visible,
+.daily-log-error a:focus-visible,
+.daily-log-error summary:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 3px;
+}

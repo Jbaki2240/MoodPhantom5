@@ -1,5 +1,5 @@
 // assessment.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabase";
 import { ArrowLeft, Brain, Plus, Salad, Footprints, MessageSquare } from "lucide-react";

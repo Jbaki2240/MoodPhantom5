@@ -187,3 +187,7 @@
   backdrop-filter: blur(1px);
   z-index: 90;
 }
+
+.logout-btn:disabled { opacity: 0.6; cursor: wait; }
+.logout-error { margin: 4px 12px 12px; color: #fca5a5; font-size: 0.8rem; line-height: 1.5; }
+.sidebar button:focus-visible, .menuBttn:focus-visible { outline: 2px solid #a78bfa; outline-offset: 3px; }

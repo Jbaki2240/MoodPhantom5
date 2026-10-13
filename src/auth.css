@@ -209,3 +209,17 @@
 .action-secondary-btn:hover { 
   background-color: #1b1c26; 
 }
+
+.auth-logout-warning { padding: 12px; border-radius: 8px; color: #fde68a; background: rgba(245, 158, 11, 0.1); font-size: 0.85rem; line-height: 1.5; }
+
+.auth-fields { display: flex; flex-direction: column; gap: 16px; border: 0; padding: 0; margin: 0; min-width: 0; }
+.auth-toggle button, .auth-back { border: 0; background: transparent; font: inherit; cursor: pointer; }
+.auth-toggle button { color: #a78bfa; font-weight: 600; }
+.auth-back { display: block; margin: 16px auto 0; color: #94a3b8; font-size: 0.85rem; }
+.auth-container button:disabled { opacity: 0.6; cursor: not-allowed; }
+.error-message p { margin: 0; }
+.auth-setup-help { text-align: left; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(239, 68, 68, 0.3); line-height: 1.6; }
+.auth-setup-help ol { padding-left: 20px; }
+.auth-setup-help a { color: #c4b5fd; }
+.auth-setup-help .auth-error-code { margin-top: 10px; font-size: 0.75rem; overflow-wrap: anywhere; }
+.auth-container button:focus-visible, .auth-container a:focus-visible { outline: 2px solid #a78bfa; outline-offset: 3px; }

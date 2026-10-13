@@ -1,242 +1,180 @@
-// logDaily.jsx
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "./supabase"; // Pointed directly to your root level supabase.js file
-import { ArrowLeft, Calendar, Moon, Utensils, Activity, Brain, Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, Moon, Utensils, Activity, Brain } from "lucide-react";
+import { loadDailyLog, saveDailyLog } from "./dailyLogs";
+import DailyLogError from "./DailyLogError";
+import { EMPTY_LOG, EXERCISE_TYPES, getLocalDate, toLogForm } from "./dailyLogData";
 import "./logDaily.css";
 
-const QUALITY_EMOJIS = ["🥵", "😁", "🙂", "🤨", "😩"];
+// Keep the original numeric indices so saved quality selections retain meaning.
+const QUALITY_OPTIONS = [
+  { emoji: "🥵", label: "Very restless" },
+  { emoji: "😁", label: "Excellent" },
+  { emoji: "🙂", label: "Good" },
+  { emoji: "🤨", label: "Fair" },
+  { emoji: "😩", label: "Poor" },
+];
 
 export default function LogDaily() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [date, setDate] = useState(getLocalDate);
+  const [form, setForm] = useState({ ...EMPTY_LOG });
+  const [loadedDate, setLoadedDate] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
+  const [saveError, setSaveError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [existing, setExisting] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const saving = useRef(false);
+  const dirty = useRef(false);
+  const ready = !loading && loadedDate === date && !loadError;
 
-  // Form states matching your exact schema columns
-  const [hoursSlept, setHoursSlept] = useState(6.0);
-  const [sleepQuality, setSleepQuality] = useState(1); // Mapped to your int4 column
-  const [breakfastEaten, setBreakfastEaten] = useState(true);
-  const [lunchEaten, setLunchEaten] = useState(true);
-  const [dinnerEaten, setDinnerEaten] = useState(false);
-  const [steps, setSteps] = useState(7420);
-  const [exerciseType, setExerciseType] = useState("Walking");
-  const [stressLevel, setStressLevel] = useState(7);
-
-  const getTodayDateString = () => {
-    return new Date().toISOString().split("T")[0];
-  };
-
-  // Pre-load data from your table if an entry already exists for today
   useEffect(() => {
-    async function loadTodayData() {
+    let active = true;
+    async function load() {
+      setLoading(true);
+      setLoadError(null);
+      setSaveError(null);
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data, error } = await supabase
-          .from("daily_logs")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("log_date", getTodayDateString())
-          .maybeSingle();
-
-        if (data) {
-          setHoursSlept(data.hours_slept || 6.0);
-          setSleepQuality(data.sleep_quality !== undefined ? data.sleep_quality : 1);
-          setBreakfastEaten(data.breakfast_eaten || false);
-          setLunchEaten(data.lunch_eaten || false);
-          setDinnerEaten(data.dinner_eaten || false);
-          setSteps(data.steps || 0);
-          setExerciseType(data.exercise_type || "Walking");
-          setStressLevel(data.stress_level || 5);
+        const data = await loadDailyLog(date);
+        if (active) {
+          if (!dirty.current) setForm(toLogForm(data));
+          setExisting(Boolean(data));
+          setLoadedDate(date);
         }
       } catch (err) {
-        console.error("Error pre-loading existing logs:", err.message);
+        if (active) {
+          setLoadedDate(null);
+          setLoadError(err);
+        }
+      } finally {
+        if (active) setLoading(false);
       }
     }
-    loadTodayData();
-  }, []);
+    load();
+    return () => { active = false; };
+  }, [date, retry]);
 
-  const handleSaveData = async () => {
+  useEffect(() => {
+    if (ready && location.hash) {
+      document.getElementById(location.hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [ready, location.hash]);
+
+  function update(name, value) {
+    dirty.current = true;
+    setForm((previous) => ({ ...previous, [name]: value }));
+    setSaveError(null);
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (!ready || saving.current) return;
+    saving.current = true;
     setSubmitting(true);
+    setSaveError(null);
     try {
-      const { data: { user }, error: authErr } = await supabase.auth.getUser();
-      if (authErr || !user) throw new Error("No active user session found.");
-
-      // Calculate total meals logged to show summary metrics on your main dashboard
-      const totalMealsLogged = [breakfastEaten, lunchEaten, dinnerEaten].filter(Boolean).length;
-
-      const { error } = await supabase.from("daily_logs").upsert(
-        {
-          user_id: user.id,
-          log_date: getTodayDateString(),
-          hours_slept: parseFloat(hoursSlept),
-          sleep_quality: parseInt(sleepQuality),
-          breakfast_eaten: breakfastEaten,
-          lunch_eaten: lunchEaten,
-          dinner_eaten: dinnerEaten,
-          meals_logged: totalMealsLogged, // Helper summary calculation field
-          steps: parseInt(steps) || 0,
-          exercise_type: exerciseType,
-          stress_level: parseInt(stressLevel)
-        },
-        { onConflict: "user_id,log_date" }
-      );
-
-      if (error) throw error;
-
-      alert("🎉 Log synchronized securely with Supabase!");
-      navigate("/");
+      const saved = await saveDailyLog(form, date);
+      navigate("/", { state: { savedDate: saved.log_date } });
     } catch (err) {
-      console.error("Submission error:", err.message);
-      alert(`Failed to save: ${err.message}`);
+      setSaveError(err);
     } finally {
+      saving.current = false;
       setSubmitting(false);
     }
-  };
+  }
 
   return (
     <div className="log-container">
-      {/* HEADER BAR */}
       <div className="log-header">
-        <button className="back-btn" onClick={() => navigate("/")}>
+        <button type="button" className="back-btn" aria-label="Back to home" disabled={submitting} onClick={() => navigate("/")}>
           <ArrowLeft size={22} />
         </button>
         <h2>Log Daily</h2>
-        <button className="cal-btn" onClick={() => alert("Calendar coming soon!")}>
-          <Calendar size={22} />
-        </button>
       </div>
-
-      {/* SLEEP CARD */}
-      <div className="log-card">
-        <div className="card-title sleep-title">
-          <Moon size={18} />
-          <span>Sleep</span>
-        </div>
-        <div className="slider-header">
-          <span>Hours Slept</span>
-          <div className="slider-val">
-            {parseFloat(hoursSlept).toFixed(1)}
-            <span>hours</span>
-          </div>
-        </div>
-        <input
-          type="range"
-          className="range-slider"
-          min="0"
-          max="12"
-          step="0.5"
-          value={hoursSlept}
-          onChange={(e) => setHoursSlept(e.target.value)}
-        />
-        <div className="slider-labels">
-          <span>0</span><span>4</span><span>8</span><span>12</span>
-        </div>
-        <div className="sub-label">Sleep Quality</div>
-        <div className="emoji-row">
-          {QUALITY_EMOJIS.map((emoji, idx) => (
-            <button
-              key={idx}
-              className={`emoji-btn ${sleepQuality === idx ? "active" : ""}`}
-              onClick={() => setSleepQuality(idx)}
-            >
-              {emoji}
-            </button>
-          ))}
-        </div>
+      <div className="log-date-field">
+        <label htmlFor="log-date">Log date</label>
+        <input id="log-date" type="date" required max={getLocalDate()} value={date} disabled={submitting}
+          onChange={(event) => {
+            if (event.target.value && event.target.value !== date) {
+              dirty.current = false;
+              setDate(event.target.value);
+            }
+          }} />
       </div>
-
-      {/* MEALS CARD */}
-      <div className="log-card">
-        <div className="card-title meals-title">
-          <Utensils size={18} />
-          <span>Meals</span>
-        </div>
-        <div className="meals-grid">
-          <div className="meal-option">
-            <span>Breakfast</span>
-            <div className={`meal-checkbox ${breakfastEaten ? "checked" : ""}`} onClick={() => setBreakfastEaten(!breakfastEaten)}>
-              <Check size={16} strokeWidth={3} />
+      {loading && <p className="log-notice" role="status">Loading your saved entry…</p>}
+      {(loadError || saveError) && <DailyLogError error={loadError || saveError}
+        onRetry={() => setRetry((value) => value + 1)} retrying={loading || submitting} />}
+      {ready && <p className="log-notice">{existing ? "Edit your saved entry. Saving will update this date." : "No entry for this date yet. Fill in your daily log below."}</p>}
+      <form onSubmit={handleSubmit} aria-busy={loading || submitting}>
+        <fieldset className="log-fields" disabled={!ready || submitting}>
+          <legend className="sr-only">Daily health log</legend>
+          <section className="log-card" id="sleep" aria-labelledby="sleep-title">
+            <h3 className="card-title sleep-title" id="sleep-title"><Moon size={18} />Sleep</h3>
+            <div className="input-box">
+              <label htmlFor="hours-slept">Hours slept (last night)</label>
+              <div className="input-wrapper">
+                <input id="hours-slept" name="hours_slept" type="number" min="0" max="24" step="0.1" required
+                  value={form.hours_slept} onChange={(event) => update("hours_slept", event.target.value)} placeholder="e.g. 7.5" />
+                <span className="unit">hours</span>
+              </div>
             </div>
-          </div>
-          <div className="meal-option">
-            <span>Lunch</span>
-            <div className={`meal-checkbox ${lunchEaten ? "checked" : ""}`} onClick={() => setLunchEaten(!lunchEaten)}>
-              <Check size={16} strokeWidth={3} />
+            <div className="sub-label quality-label" id="quality-label">Sleep quality (optional)</div>
+            <div className="emoji-row" role="group" aria-labelledby="quality-label">
+              {QUALITY_OPTIONS.map(({ emoji, label }, index) => (
+                <button type="button" key={label} className={`emoji-btn ${form.sleep_quality === index ? "active" : ""}`}
+                  aria-label={label} title={label} aria-pressed={form.sleep_quality === index}
+                  onClick={() => update("sleep_quality", form.sleep_quality === index ? null : index)}>{emoji}</button>
+              ))}
             </div>
-          </div>
-          <div className="meal-option">
-            <span>Dinner</span>
-            <div className={`meal-checkbox ${dinnerEaten ? "checked" : ""}`} onClick={() => setDinnerEaten(!dinnerEaten)}>
-              <Check size={16} strokeWidth={3} />
+          </section>
+          <section className="log-card" id="meals" aria-labelledby="meals-title">
+            <h3 className="card-title meals-title" id="meals-title"><Utensils size={18} />Meals</h3>
+            <div className="meals-grid">
+              {[["breakfast_eaten", "Breakfast"], ["lunch_eaten", "Lunch"], ["dinner_eaten", "Dinner"]].map(([name, label]) => (
+                <label className="meal-option" key={name}>
+                  <span>{label}</span>
+                  <input type="checkbox" name={name} className="meal-input" checked={form[name]}
+                    onChange={(event) => update(name, event.target.checked)} />
+                </label>
+              ))}
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ACTIVITY CARD */}
-      <div className="log-card">
-        <div className="card-title activity-title">
-          <Activity size={18} />
-          <span>Activity</span>
-        </div>
-        <div className="activity-row">
-          <div className="input-box">
-            <label>Steps</label>
-            <div className="input-wrapper">
-              <input type="number" value={steps} onChange={(e) => setSteps(e.target.value)} />
-              <span className="unit">steps</span>
+          </section>
+          <section className="log-card" id="activity" aria-labelledby="activity-title">
+            <h3 className="card-title activity-title" id="activity-title"><Activity size={18} />Activity</h3>
+            <div className="activity-row">
+              <div className="input-box">
+                <label htmlFor="steps">Steps</label>
+                <div className="input-wrapper">
+                  <input id="steps" name="steps" type="number" min="0" max="2147483647" step="1" required placeholder="e.g. 4200"
+                    value={form.steps} onChange={(event) => update("steps", event.target.value)} />
+                </div>
+              </div>
+              <div className="input-box">
+                <label htmlFor="exercise-type">Sports / Exercise</label>
+                <div className="input-wrapper">
+                  <select id="exercise-type" name="exercise_type" value={form.exercise_type} onChange={(event) => update("exercise_type", event.target.value)}>
+                    {EXERCISE_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="input-box">
-            <label>Sports / Exercise</label>
-            <div className="input-wrapper">
-              <select value={exerciseType} onChange={(e) => setExerciseType(e.target.value)}>
-                <option value="Walking">Walking</option>
-                <option value="Running">Running</option>
-                <option value="Cycling">Cycling</option>
-                <option value="Yoga">Yoga</option>
-                <option value="Gym">Gym</option>
-                <option value="None">None</option>
-              </select>
+          </section>
+          <section className="log-card" id="stress" aria-labelledby="stress-title">
+            <h3 className="card-title stress-title" id="stress-title"><Brain size={18} />Stress Level</h3>
+            <div className="input-box">
+              <label htmlFor="stress-level">How stressed did you feel? (1 = low, 10 = high)</label>
+              <div className="input-wrapper">
+                <input id="stress-level" name="stress_level" type="number" min="1" max="10" step="1" required placeholder="1–10"
+                  value={form.stress_level} onChange={(event) => update("stress_level", event.target.value)} />
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* STRESS CARD */}
-      <div className="log-card">
-        <div className="card-title stress-title">
-          <Brain size={18} />
-          <span>Stress Level</span>
-        </div>
-        <div className="slider-header">
-          <span />
-          <div className="slider-val" style={{ fontSize: "1.2rem" }}>
-            {stressLevel} <span>/ 10</span>
-          </div>
-        </div>
-        <div className="stress-gradient-bar">
-          <input
-            type="range"
-            className="range-slider stress-slider"
-            min="1"
-            max="10"
-            step="1"
-            value={stressLevel}
-            onChange={(e) => setStressLevel(e.target.value)}
-          />
-        </div>
-        <div className="stress-labels">
-          {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-            <span key={num}>{num}</span>
-          ))}
-        </div>
-      </div>
-
-      <button className="save-btn" onClick={handleSaveData} disabled={submitting}>
-        {submitting ? "Saving Log Entry..." : "Save Today's Data"}
-      </button>
+          </section>
+          <button className="save-btn" type="submit">{submitting ? "Saving…" : existing ? "Update daily log" : "Save daily log"}</button>
+        </fieldset>
+      </form>
     </div>
   );
 }
