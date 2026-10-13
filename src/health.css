@@ -1,0 +1,197 @@
+/* health.css */
+.health-container {
+  padding: 16px;
+  padding-bottom: 100px;
+  background-color: #090a0f !important;
+  min-height: 100vh;
+  color: #ffffff;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* HEADER BAR */
+.health-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.health-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  margin-right: 40px; /* Counter-balance the hamburger icon to center text */
+}
+
+/* CARDS STRUCTURAL LAYOUT */
+.health-card {
+  background-color: #12131a;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
+}
+
+.health-card h3 {
+  margin: 0 0 14px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+/* CONDITIONS INNER SUB-CARD */
+.condition-item {
+  background-color: #090a0f;
+  padding: 14px 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+}
+
+.condition-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.condition-info span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.chevron-right {
+  color: #64748b;
+}
+
+/* MEDICATION CHECKLIST ROUTINES */
+.med-tracker-box {
+  background-color: #090a0f;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.med-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.med-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.med-row:last-child {
+  border-bottom: none;
+}
+
+.med-row span {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.health-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid #232430;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: transparent;
+}
+
+.health-checkbox.checked {
+  background-color: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+/* MEASUREMENTS HORIZONTAL SCROLL GRID */
+.measurements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.measure-box {
+  background-color: #090a0f;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.measure-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: block;
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+.measure-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.measure-unit {
+  font-size: 0.7rem;
+  color: #64748b;
+  display: block;
+}
+
+/* ASSESSMENT INFO BANNER AND BUTTONS */
+.assessment-text {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin: 0 0 16px 0;
+}
+
+.assessment-btn {
+  width: 100%;
+  background-color: #6d28d9;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.assessment-btn:hover {
+  background-color: #5b21b6;
+}

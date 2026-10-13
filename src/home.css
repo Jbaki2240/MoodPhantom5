@@ -1,0 +1,177 @@
+:root {
+  /*deciding on background colour*/
+  --bg-dark:#0f0f1a;
+  --bg-card:#1a1a2e;
+  /* Buttons/accent colour*/
+  --purple:#8b5cf6;
+  --blue:#3b82f6;
+  --pink:#ec4899;
+  /*Text colour*/
+  --text:#f1f5f9;
+  --muted:#94a3b8;
+}
+
+/* Main PAGE layout */
+.home-container {
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-bottom: 90px;
+  background: var(--bg-dark);/*setting bg colour same as initial*/
+  min-height: 100vh;/*height of browser window*/
+  color: var(--text);/*setting text colour same as initial*/
+}
+
+/* HEADER*/
+.home-header h2 {
+  margin:0;/*removing default margin from h2*/
+  font-size:1.2rem;
+}
+
+.home-header p {
+  margin-top: 4px;
+  margin-left:0;
+  margin-right:0;
+  margin-bottom:16px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* using GRID festure*/
+.stats-grid {
+  display: grid;
+  grid-template-columns:1fr 1fr; /*for 2 equal columns*/
+  gap:12px;
+}
+
+.card {
+  background:var(--bg-card);
+  border-radius:14px;
+  padding:12px;
+  display:flex;/*adding flexible children box*/
+  gap:10px;
+  border: 1px solid
+  rgba(255,255,255,0.05);
+}
+
+.card h3 {
+  margin:0;/*no default margin*/
+  font-size:0.85rem;
+  color:var(--muted);
+}
+
+.card p {
+  margin-top: 4px;
+  margin-left:0;
+  margin-right:0;
+  margin-bottom:4px;
+  font-size:1.1rem;
+  font-weight:600;/*adding semi bold text*/
+}
+
+.card span {
+  font-size:0.7rem;/*setting smaller text size for sublins*/
+  color:var(--muted);
+}
+
+/* Adding icon colour*/
+.sleep svg {color:var(--purple);}
+.steps svg {color:var(--blue);}
+.stress svg {color:var(--pink);}
+.meals svg {color:#f59e0b;}
+
+/* Progress bars */
+.bar {
+  height:5px;
+  background:rgba(255,255,255,0.06);/*for empty part*/
+  border-radius:10px;/*round edge*/
+  margin-top:8px;
+  overflow:hidden;
+}
+
+.bar div {
+  height:100%;/*to fill the whole bar*/
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+}
+
+/* INSIGHT */
+.insight-card {
+  margin-top: 14px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(59,130,246,0.08));
+  padding: 12px;
+  border-radius: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.insight-card h4 {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.insight-card p {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.bulb {
+  color: var(--purple);
+}
+
+/* QUICK ACTIONS */
+.section-title {
+  margin: 16px 0 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.quick-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.quick-actions button {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-dark);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.bottom-nav div {
+  color: var(--muted);
+}
+
+.bottom-nav .active {
+  color: var(--purple);
+}
+
+.bottom-nav .plus {
+  background: var(--purple);
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  margin-top: -20px;
+}

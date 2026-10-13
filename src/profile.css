@@ -1,0 +1,146 @@
+/* profile.css */
+.profile-page-view-container {
+  padding: 16px;
+  padding-bottom: 100px;
+  background-color: #090a0f !important;
+  min-height: 100vh;
+  color: #ffffff;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* AVATAR HEADER SUMMARY PANEL */
+.profile-card-header {
+  background-color: #12131a;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.edit-action-top-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+}
+
+.edit-action-top-btn:hover {
+  background-color: #1b1c26;
+  color: #ffffff;
+}
+
+.profile-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar-mock-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #2e1a47;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #8b5cf6;
+}
+
+.user-identity-meta h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.user-identity-meta p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* DATA FIELD LIST SECTION */
+.personal-info-card-panel {
+  background-color: #12131a;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.personal-info-card-panel h4 {
+  margin: 0 0 16px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.metric-data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 0.95rem;
+}
+
+.metric-data-row:last-child {
+  border-bottom: none;
+}
+
+.metric-data-row .label-tag {
+  color: #cbd5e1;
+}
+
+.metric-data-row .value-display {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* INPUT FORM CONTEXT CONTROL RESETS */
+.metric-data-row input, .metric-data-row select {
+  background-color: #090a0f;
+  border: 1px solid #232430;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: right;
+  width: 150px;
+  outline: none;
+}
+
+.metric-data-row input:focus, .metric-data-row select:focus {
+  border-color: #8b5cf6;
+}
+
+/* MASTER SUBMIT BANNER TRIGGER BUTTON */
+.profile-save-trigger-btn {
+  width: 100%;
+  background-color: #8b5cf6;
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s;
+}
+
+.profile-save-trigger-btn:hover {
+  background-color: #7c3aed;
+}

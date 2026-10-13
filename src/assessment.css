@@ -1,0 +1,234 @@
+/* assessment.css */
+.assessment-container {
+  padding: 16px;
+  padding-bottom: 100px;
+  background-color: #090a0f !important;
+  min-height: 100vh;
+  color: #ffffff;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* HEADER ELEMENTS */
+.assess-header {
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assess-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  margin-right: 40px;
+}
+
+/* PROGRESS TRAIL BAR */
+.progress-container {
+  width: 100%;
+  height: 6px;
+  background-color: #1e1f29;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #8b5cf6;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.question-counter {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 16px;
+}
+
+/* QUESTION BOX LAYER */
+.question-prompt {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ffffff;
+  text-align: left;
+  margin-bottom: 24px;
+  min-height: 80px;
+}
+
+/* OPTIONS RADIAL CHIPS GRID */
+.options-stack {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.option-chip {
+  background-color: #12131a !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  color: #cbd5e1 !important;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.option-num {
+  font-weight: 600;
+  color: #64748b;
+  min-width: 14px;
+}
+
+.option-chip:hover {
+  background-color: #1b1c26 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.option-chip.selected {
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: #ffffff !important;
+}
+
+.option-chip.selected .option-num {
+  color: #ffffff !important;
+}
+
+/* BOTTOM WORKFLOW BUTTONS */
+.assess-next-btn {
+  width: 100%;
+  background-color: #6d28d9 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 14px !important;
+  padding: 16px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.assess-next-btn:hover:not(:disabled) {
+  background-color: #5b21b6 !important;
+}
+
+.assess-next-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* RESULT GRAPH PANEL LAYOUT */
+.result-panel {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.brain-graphic-wrapper {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.brain-icon-img {
+  color: #ec4899;
+  filter: drop-shadow(0 0 16px rgba(236, 72, 153, 0.3));
+}
+
+.heart-badge-overlay {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background-color: #ffffff;
+  color: #ec4899;
+  border-radius: 50%;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.result-verdict {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+.result-verdict span {
+  color: #ec4899;
+  font-weight: 700;
+}
+
+.result-disclaimer {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 40px;
+  max-width: 280px;
+}
+
+/* RECOMMENDATIONS METRIC CARDS */
+.rec-card {
+  background-color: #12131a !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin-bottom: 14px;
+  display: flex !important;
+  gap: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.rec-icon-area {
+  display: flex !important;
+  align-items: flex-start;
+  padding-top: 2px;
+}
+
+.rec-icon-area.food svg { color: #10b981; }
+.rec-icon-area.activity svg { color: #3b82f6; }
+.rec-icon-area.mind svg { color: #8b5cf6; }
+
+.rec-details h4 {
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.rec-details.food h4 { color: #10b981; }
+.rec-details.activity h4 { color: #3b82f6; }
+.rec-details.mind h4 { color: #8b5cf6; }
+
+.rec-details p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
